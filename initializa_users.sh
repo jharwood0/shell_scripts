@@ -1,35 +1,50 @@
-echo "creating array"
 readarray array < test.txt
 for element in "${array[@]}"
 do
-    	#echo $element
     	IFS=',' read -a csv <<< $element
     	command="useradd -m -k /etc/skel -s /bin/rbash -g student -c \"${csv[1]} ${csv[0]}\" ${csv[2]}"
-    	echo $command
-    	eval $command
 
+    	#-m makes home directory
+	#-k /etc/skel puts everything in /etc/skel to /home/$user
+	#-s shell settings
+	#-g group
+	#-c offically "Comments" but used for full name
+	#last var is for username
+
+	echo $command
+    	eval $command
+	
+	#this will use chpasswd to change the password of the user
+	#easier than encrypting the password by hand - bit dirty but better than nothing
     	password="echo ${csv[2]}:${csv[3]} | chpasswd"
     	eval $password
     	echo $password
-
-    	website="mkdir /var/www/${csv[2]}"
+	
+	#creates the dir of their website
+    	website="mkdir /var/www/htdocs/${csv[2]}"
     	eval $website
     	echo $website
-
+	
+	#creates an idex file that will state which user space it is
     	index="printf \"<html>\n<head>\n</head>\n<body>\n<h1>Welcome to ${csv[1]} ${csv[2]}'s userspace\n </h1></body></html>\" > /var/www/${csv[2]}/index.html"   	 
     	#printf because it uses \n
     	eval $index
     	echo $index
 
-#create symlink in userdir (NOT TESTED YET)
-sym=”ln -s /var/ww/htdocs/${csv[2]} /home/${csv[2]}/${csv[2]}”
-echo $sym
-eval $sym
+	#create symlink in userdir to their web user space
+	#must be this way round so that we don't get a 403 error
+	sym=”ln -s /var/www/htdocs/${csv[2]} /home/${csv[2]}/${csv[2]}”
+	echo $sym
+	eval $sym
 
-#need to set permission for www
-#chown /var/www/htdocs/$username
-#chown /var/www/htdocs/$username/index.html
-#sorted
+	#to allow the user to modify it but and no one else we must chown the dir and the file we created so they can modify it
+	#need to set permission for www
+	chown="chown /var/www/htdocs/${csv[2]} ${csv[2]}"
+	echo $chown
+	eval $chown
+	chown="chown /var/www/htdocs/${csv[2]}/index.html ${csv[2]}"
+	echo $chown
+	eval $chown
 
     	#this is no longer needed, i have added .bash_profile to /etc/skel
     	#.bash_profile
@@ -39,9 +54,11 @@ eval $sym
 
     	#chmod their home directory so only they can open it
     	chmod="chmod 700 /home/${csv[2]}"
-    	#eval=chmod
+    	eval=chmod
     	echo $chmod
+	
 
+	##for reference##
     	#echo "last name: ${csv[0]}"
     	#echo "first name: ${csv[1]}"
     	#echo "username: ${csv[2]}"
