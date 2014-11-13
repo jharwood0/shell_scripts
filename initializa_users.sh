@@ -1,7 +1,7 @@
-readarray array < test.txt
-for element in "${array[@]}"
+readarray array < cnos.csv #puts each line into array
+for element in "${array[@]}" #foreach element in array...
 do
-    	IFS=',' read -a csv <<< $element
+    	IFS=',' read -a csv <<< $element #separate all text in line by commas
     	command="useradd -m -k /etc/skel -s /bin/rbash -g student -c \"${csv[1]} ${csv[0]}\" ${csv[2]}"
 
     	#-m makes home directory
@@ -12,7 +12,7 @@ do
 	#last var is for username
 
 	echo $command
-    	eval $command
+    	eval $command #evaluates the command and runs it
 	
 	#this will use chpasswd to change the password of the user
 	#easier than encrypting the password by hand - bit dirty but better than nothing
