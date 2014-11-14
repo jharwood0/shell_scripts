@@ -1,3 +1,9 @@
+#Unlocks necessary files
+chattr -i /etc/group
+chattr -i /etc/gshadow
+chattr -i /etc/passwd
+chattr -i /etc/shadow
+
 readarray array < cnos.csv #puts each line into array
 for element in "${array[@]}" #foreach element in array...
 do
@@ -65,3 +71,8 @@ do
     	#echo "id: ${csv[3]}"
 done
 
+#Locks files again for security reasons.
+chattr +i /etc/group
+chattr +i /etc/gshadow
+chattr +i /etc/passwd
+chattr +i /etc/shadow
