@@ -1,0 +1,12 @@
+FILES="/usr/lib/*"
+
+for f in $FILES
+do
+	extension="$f" |awk -F . '{print $NF}'
+	
+	if [$extension = "la"]
+	then
+		echo "Processing $f"
+	fi
+
+done
