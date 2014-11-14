@@ -1,4 +1,7 @@
 
+# TO DO
+#Make sure that the fle is not a directory
+
 FILES="/usr/lib/*"
 
 for f in $FILES
