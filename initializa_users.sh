@@ -42,7 +42,7 @@ do
 	sym=”ln -s /var/www/htdocs/${csv[2]} /home/${csv[2]}/${csv[2]}”
 	echo $sym
 	eval $sym
-
+	
 	#to allow the user to modify it but and no one else we must chown the dir and the file we created so they can modify it
 	#need to set permission for www
 	chown="chown /var/www/htdocs/${csv[2]} ${csv[2]}"
@@ -63,6 +63,9 @@ do
     	eval=chmod
     	echo $chmod
 	
+	firstlogin="chage -d 0 ${csv[2]}"
+	eval=firstlogin
+	echo $firstlogin
 
 	##for reference##
     	#echo "last name: ${csv[0]}"
