@@ -34,7 +34,7 @@ do
 
 	#create symlink in userdir to their web user space
 	#must be this way round so that we don't get a 403 error
-	sym="ln -s /var/www/htdocs/${csv[2]} /home/${csv[2]}/${csv[2]}"
+	sym=”ln -s /var/www/htdocs/${csv[2]} /home/${csv[2]}/${csv[2]}”
 	echo $sym
 #	eval $sym
 
