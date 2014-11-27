@@ -1,10 +1,9 @@
-Simple-User-Add
+RELEASE BRANCH
 ===============
 
-A shell script that will add a list of users in cvs format to a Linux server
-
+These are the shell scripts are have been used on the server / are being used on the server 
 Useage
 ===============
 ~$ sudo su
 
-~$ bash initaliza-users.sh
+~$ sh *.sh
