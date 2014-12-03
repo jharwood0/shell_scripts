@@ -2,8 +2,8 @@
 final=()
 
 password="741852963"
-#FinallY works fuck
-#NOTE FINAL SIZE DOES NOT GET REDUCED
+
+# The remove duplicates function is used to remove duplicate entries of programs in the arraylist
 function remove_duplicates {
 i=0
 stop=${#final[@]}
@@ -19,7 +19,7 @@ do
 			d=${final[$j]}
 			if [ "$c" = "$d" ] && [ ! -z "$c" ] #if same and not null
 			then
-				final[$j]=""
+				final[$j]=""	#this essentially remove the duplicate entry.
 			fi
 		fi
 		((j++))
@@ -28,15 +28,16 @@ do
 done
 
 }
+
 readarray array < cnos.csv #puts each line into array
 for element in "${array[@]}" #foreach element in array...
 do
 	csv=""
-	IFS=',' read -a csv <<< "$element" #this works on fedora
+	IFS=',' read -a csv <<< "$element" #split line based on commas
 	
 	username=${csv[2]}
 
-	if [ "$username" = "jharwood0" ] || [ "$username" = "scully" ]
+	if [ "$username" = "jharwood0" ] || [ "$username" = "scully" ] #ignore admin users because we run too many commands
 	then
 		echo "skipping $username"
 	else
@@ -45,13 +46,13 @@ do
 		out=$(lastcomm $username) #only run command if not admin (too many commands)
 		IFS=$'\n'
 		i=0
-		if [ -z "$out" ]
+		if [ -z "$out" ] #check if out = null
 		then
 			echo "empty output, user has not run any commands"
 		else
 			for line in $out
 			do
-				#wipe all used vars
+				#we need the first few elements in the array and the last few, becuse the number of elements is not definite, so we reverse the string and get the first 3 elements again, and then reverse that again. This allows us to concatenate the first and last elements of the line array.
 				enil=$(echo "$line"|rev) #set a reverse of the line
 
 				IFS=" "
@@ -82,10 +83,6 @@ use auditing;
 INSERT INTO user_programs(username,process_name,time)
 VALUES('$username','$process','$datetime');
 END
-
-				#echo $mysql
-				#eval $mysql
-				
 			done
 		final=() #reset final
 		fi
