@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#This script will get a list of all the users that are logged in and create a SQL query which will update that user in the "time" table (which holds all the 
+#information about how long the users have been logged in.
+
+out=$(ac -p)
+
+IFS=$'\n'
+password="741852963"
+for line in $out
+do
+
+	IFS=" "
+	read -a arr <<< "$line" #split by space
+	username=${arr[0]} #set username
+	totaltime=${arr[1]} #set time of use
+	username=$(echo $username | tr -d '\t') #remove tab from start of username
+	#echo $username
+	#echo $totaltime
+	mysql="mysql -u root -p$password -e \"use auditing; UPDATE users SET total_login_time='$totaltime' WHERE username='$username'\"" 
+	eval $mysql
+	echo $mysql
+done

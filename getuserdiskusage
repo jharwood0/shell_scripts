@@ -1,0 +1,27 @@
+#!/bin/bash
+
+echo "starting to grab disk usage"
+out=$(repquota -a)
+
+IFS=$'\n'
+i=0
+for line in $out
+do
+	if [ "$i" -gt 4 ]
+	then
+
+		#split line by whitespace
+		#grab element 0, 2,5
+		IFS=' ' read -a word <<< "$line" #this works on fedora
+		echo "${word[0]} :block=${word[2]} :inodes=${word[5]}"
+		#run mysql statement to update 'users' table in database
+		mysql -u root -p741852963 << END
+use auditing;
+UPDATE users SET used_blocks=${word[2]}, used_inodes=${word[5]}
+WHERE username='${word[0]}';
+END
+
+
+	fi
+	((i++))
+done
