@@ -1,18 +1,17 @@
 #!/bin/bash
 
 echo "starting to grab disk usage"
-out=$(repquota -a)
+out=$(repquota -a) #we used repquota to geta list of all the users blocks and inodes
 
-IFS=$'\n'
+IFS=$'\n' 
 i=0
-for line in $out
+for line in $out #split output based on new line
 do
-	if [ "$i" -gt 4 ]
+	if [ "$i" -gt 4 ] #ignore the first few lines as they are table headers and part of the repquota output
 	then
 
 		#split line by whitespace
-		#grab element 0, 2,5
-		IFS=' ' read -a word <<< "$line" #this works on fedora
+		IFS=' ' read -a word <<< "$line"
 		echo "${word[0]} :block=${word[2]} :inodes=${word[5]}"
 		#run mysql statement to update 'users' table in database
 		mysql -u root -p741852963 << END
