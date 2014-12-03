@@ -1,13 +1,11 @@
 #!/bin/bash
 
-
 # Dumping the database for backup
-
 USER="root"
 PASSWORD="741852963"
 OUTPUT="/backup/"
  
-rm "$OUTPUTDIR/*gz" > /dev/null 2>&1
+rm "$OUTPUTDIR/*gz" > /dev/null 2>&1 #remove older backups
  
 databases=`mysql --user=$USER --password=$PASSWORD -e "SHOW DATABASES;" | tr -d "| " | grep -v Database`
  
